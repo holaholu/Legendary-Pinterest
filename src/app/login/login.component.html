@@ -1,0 +1,35 @@
+<div class="jumbotron text-center myjumbo">
+  <h1>Legendary Pinterest</h1>
+  <p>This is where the fun begins</p>
+  </div>
+
+<div  class=container>
+ <flash-messages></flash-messages>
+<form #userForm="ngForm" (ngSubmit)="onsubmit()" class="col-sm-12" novalidate >
+
+
+     <div class="form-group" >
+<label for="">Username </label>
+<input #refuser2="ngModel" class="form-control" type="text" name=username [(ngModel)]=username   required>
+     
+</div>
+       
+<div class="form-group" >
+<label for="">Password </label>
+<input  #refPostcode="ngModel" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"class="form-control" type="text" name=password [(ngModel)]=password required>
+        <div *ngIf ="refPostcode.errors && (refPostcode.dirty||refPostcode.touched)" id=myred>
+ <div [hidden]="!refPostcode.errors.pattern">Please enter a minimum of 6 characters with least 1 alphabet and 1 number </div>
+
+     </div>
+     </div>
+  
+
+
+  <button [disabled]="!userForm.form.valid" type=submit class="btn btn-success btn-sm col-xs-4">Login</button>
+  
+
+   
+
+     </form>
+
+</div>

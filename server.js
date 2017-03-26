@@ -6,15 +6,18 @@ var bodyParser = require('body-parser');
 var app = express();
 
 //connect to database
-// var mongoose = require("mongoose");
+var mongoose = require("mongoose");
 
-// var url = process.env.MEMURL ;
-//  mongoose.connect(url).then(() =>  console.log('connection succesful'))
-//   .catch((err) => console.error(err));;
+var url = process.env.MEMURL ;
+ mongoose.connect(url).then(() =>  console.log('connection succesful'))
+  .catch((err) => console.error(err));;
 
-//   //=================================
-// var passport                    = require("passport"),
-//     LocalStrategy               = require("passport-local").Strategy;
+  //Import Model
+var Pinuser  = require("./models/pinuser");
+
+  //=================================
+var passport                    = require("passport"),
+    LocalStrategy               = require("passport-local").Strategy;
    
 
 
@@ -36,44 +39,99 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 //Authenticate Section
 
-//   app.use(require("express-session")({
-//     secret: "Rusty the world",
-//     resave: false,
-//     saveUninitialized: false
-// }));
+  app.use(require("express-session")({
+    secret: "Rusty the world",
+    resave: false,
+    saveUninitialized: false
+}));
 
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(Pinuser.authenticate()));
+passport.serializeUser(Pinuser.serializeUser());
+passport.deserializeUser(Pinuser.deserializeUser());
 //Authentication
 
 
-//==========SEED Part
-
-// app.get("/book",function(req,res){
-       
-//   Book.create({title:"How to Turn Challenging Situations Around",author:"Gary and Lynne Bartlett",imgurl:"https://www.free-ebooks.net/2d_covers/large/1156798713.jpg",downurl:"https://www.free-ebooks.net/ebook/How-to-Turn-Challenging-Situations-Around/pdf"},function(err,book){
-//       if (err){
-//            res.send(err.message);
+app.post("/signup",function(req,res){
+       // save/register user details and authenticate for instant login
+  Pinuser.register(new Pinuser({username:req.body.username,email:req.body.email}),req.body.password,function(err,user){
+      if (err){
+           res.send(err.message);
          
-//       }else {
-//        console.log(book);
-//        res.redirect("/");
-//       }
-//   });
-// })
+      }else {
+        passport.authenticate("local")(req,res,function(){
+              res.send(req.user.username);
+              // console.log(req.user)
+       });
+      }
+  });
+ 
+})
 
 
 
-//======================
+ app.post("/login",passport.authenticate("local",{}),function(req,res){
+     //console.log(req.user)
+      
+        if (req.user==undefined){
+          res.send("")
+        } else {
+              res.send(req.user.username);
+              
+        }
+      
+      });
+
+app.get('/logout',(req,res)=>{
+   req.logout();
+ res.redirect("/");
+  
+});
+
+
+app.get('/getuser',(req,res)=>{
+  if (req.user== undefined){
+    res.send("");
+    
+ }else {
+res.send(req.user.username);
+
+  }
+  
+});
+
+app.post("/settings",function(req,res){
+  var store=req.user
+       
+Pinuser.findByIdAndRemove(req.user._id,function(err){
+   if(err){
+     console.log(err.message);
+   }else {
+     
+   }
+
+})
+
+  Pinuser.register(new Pinuser({username:store.username,email:store.password}),req.body.password,function(err,user){
+      if (err){
+           res.send(err.message);
+         
+      }else {
+        passport.authenticate("local")(req,res,function(){
+              res.send(req.user.username);
+              
+       });
+      }
+  });
+ 
+})
 
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html')); //path installation required
-  //res.sendFile("../dist/index.html'");
+
 });
 
 
