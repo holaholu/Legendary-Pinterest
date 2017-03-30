@@ -9,16 +9,17 @@ var app = express();
 var mongoose = require("mongoose");
 
 var url = process.env.MEMURL ;
- mongoose.connect(url).then(() =>  console.log('connection succesful'))
+ mongoose.connect(url).then(() =>  console.log('connected to database '))
   .catch((err) => console.error(err));;
 
   //Import Model
 var Pinuser  = require("./models/pinuser");
+var Image  = require("./models/image");
 
   //=================================
 var passport                    = require("passport"),
-    LocalStrategy               = require("passport-local").Strategy;
-   
+    LocalStrategy               = require("passport-local").Strategy,
+    TwitterStrategy             = require('passport-twitter').Strategy;
 
 
   
@@ -47,10 +48,72 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+//Local Auth
 passport.use(new LocalStrategy(Pinuser.authenticate()));
-passport.serializeUser(Pinuser.serializeUser());
-passport.deserializeUser(Pinuser.deserializeUser());
+// passport.serializeUser(Pinuser.serializeUser());
+// passport.deserializeUser(Pinuser.deserializeUser());
+//==========
+
+//Twitter Auth
+passport.use(new TwitterStrategy ({
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    callbackURL: '/login/twitter/return'
+  },
+  function(token, tokenSecret, profile, cb) {
+      return cb(null, profile);
+  }));
+  
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
+//==================
 //Authentication
+
+app.get('/twittersignin', passport.authenticate('twitter'));
+
+app.get('/login/twitter/return',
+  passport.authenticate('twitter', { failureRedirect: '/login' }),
+  function(req, res) {
+    
+   Pinuser.find({username:req.user.username},function (err,founduser){ //logic below adds to database if user does not already exist in database
+        if (err){
+          console.log(err)
+        }else {
+           if(founduser.length<1){
+              Pinuser.register(new Pinuser({username:req.user.username}),function(err,user){
+      if (err){
+           res.send(err.message);
+         
+      }else {
+       
+         res.redirect("/pinboard");
+      
+  } } );
+           }else {
+             res.redirect("/pinboard");
+           }
+
+        }
+
+   })
+      
+    
+
+  
+  } );
+
+
+
+
+
+
 
 
 app.post("/signup",function(req,res){
@@ -103,6 +166,17 @@ res.send(req.user.username);
 
 app.post("/settings",function(req,res){
   var store=req.user
+
+  if (req.user._id==undefined) {
+           
+ Pinuser.remove({username:req.user.username},function(err){
+   if(err){
+     console.log(err.message);
+   }
+
+})
+
+  } else {
        
 Pinuser.findByIdAndRemove(req.user._id,function(err){
    if(err){
@@ -112,7 +186,7 @@ Pinuser.findByIdAndRemove(req.user._id,function(err){
    }
 
 })
-
+}
   Pinuser.register(new Pinuser({username:store.username,email:store.password}),req.body.password,function(err,user){
       if (err){
            res.send(err.message);
@@ -126,6 +200,68 @@ Pinuser.findByIdAndRemove(req.user._id,function(err){
   });
  
 })
+
+
+
+app.post("/addimage",function(req,res){
+       // save/register user details and authenticate for instant login
+  Image.create(new Image({username:req.user.username,url:req.body.url,title:req.body.title}),function(err,img){
+      if (err){
+           res.send(err.message);
+         
+      }else {
+      
+             
+    
+      }
+  });
+ res.redirect("/getimage")
+})
+
+app.get("/getimage",function(req,res){
+       // save/register user details and authenticate for instant login
+  Image.find({username:req.user.username},function(err,img){
+      if (err){
+           res.send(err.message);
+         
+      }else {
+        //Sort by most recent
+         img.sort(function(a,b){
+          return new Date(b.date) - new Date(a.date);
+          }); 
+      
+            res.send(img);
+             
+    
+      }
+  });
+ 
+})
+
+app.get("/getrecent",function(req,res){
+       // save/register user details and authenticate for instant login
+  Image.find({},function(err,img){
+      if (err){
+           res.send(err.message);
+         
+      }else {
+      
+         
+         
+       //date sort code
+       img.sort(function(a,b){
+          return new Date(b.date) - new Date(a.date);
+          });      
+         
+          res.send(img);
+         
+    
+      }
+  });
+ 
+})
+
+
 
 
 // Catch all other routes and return the index file

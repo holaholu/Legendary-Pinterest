@@ -3,7 +3,7 @@
   <p>This is where the fun begins</p>
   </div>
 
-<div  class=container>
+<div  class=container id=signdiv>
    <flash-messages></flash-messages>
  
 <form #userForm="ngForm" (ngSubmit)="onsubmit()" class="col-sm-12" novalidate>
@@ -36,9 +36,9 @@
   
 
 
-  <button [disabled]="!userForm.form.valid" type=submit class="btn btn-success btn-sm col-xs-4">Sign up</button>
+  <button [disabled]="!userForm.form.valid" type=submit class="btn btn-success btn-lg col-xs-4">Sign up</button>
   
-
+    <a href="/twittersignin"><img src="http://www.engagementringwall.com/wp-content/themes/EngagementRingWall/images/TwitterSignUp.png" alt="" id=imgtwt></a>
    
 
      </form>

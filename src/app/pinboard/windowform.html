@@ -1,0 +1,21 @@
+<form #userForm="ngForm" (ngSubmit)="onsubmit()" class="col-sm-6" novalidate >
+
+
+     <div class="form-group" >
+<label for="">Title </label>
+<input #reftitle="ngModel" class="form-control" type="text" name=title [(ngModel)]=title   required>
+     
+</div>
+       
+<div class="form-group" >
+<label for="">URL Link</label>
+<input  #refurl="ngModel" class="form-control" type="text" name=url [(ngModel)]=url required>
+      
+     </div>
+  
+
+
+  <button [disabled]="!userForm.form.valid" type=submit class="btn btn-success btn-lg col-xs-4">Add Pin</button>
+   
+
+     </form>

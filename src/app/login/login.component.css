@@ -5,6 +5,9 @@ input.ng-valid.ng-dirty{
 border:2px green solid
     }
 
-    #myred{
+ #myred{
         color:red;
+    }
+ #imgtwt{
+        width:30%;
     }

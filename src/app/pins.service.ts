@@ -31,6 +31,19 @@ constructor(private http: Http) { }
       .map(res => res.text()).catch(this._errorHandler);
   }
 
+addImage(title,url) {
+    return this.http.post('/addimage',{title:title,url:url})
+      .map(res => res.json()).catch(this._errorHandler);
+  }
+  getImage(){
+    return this.http.get('/getimage')
+      .map(res => res.json()).catch(this._errorHandler);
+  }
+ getRecent(){
+    return this.http.get('/getrecent')
+      .map(res => res.json()).catch(this._errorHandler);
+  }
+
    _errorHandler(error:Response){
           console.error(error);
           return Observable.throw(error || "Server Error");

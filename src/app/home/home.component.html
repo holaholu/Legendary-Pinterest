@@ -1,3 +1,17 @@
-<p>
-  home works!
-</p>
+<div class="jumbotron text-center myjumbo">
+  <h1>Legendary Pinterest</h1>
+  <p>Where the fun begins . . .</p>
+  </div>
+
+
+
+
+  
+
+    <masonry [options]="options" [useImagesLoaded]="true">
+  <md-card masonry-brick *ngFor="let item of images">
+    <img  src="{{item.url}}" style="width:100%;">
+   <p >Prototype Images</p>
+  
+  </md-card>
+</masonry>

@@ -1,3 +1,9 @@
-<p>
-  recentpins works!
-</p>
+
+<h1>Latest Pins</h1>
+ <masonry [options]="options" [useImagesLoaded]="true">
+  <md-card masonry-brick *ngFor="let img of imagelist">
+    <img  src="{{img.url}}" style="width:100%;">
+   <p >{{img.title}}</p>
+  
+  </md-card>
+</masonry>

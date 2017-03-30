@@ -13,6 +13,8 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { PinboardComponent } from './pinboard/pinboard.component';
 import { RecentpinsComponent } from './recentpins/recentpins.component';
 import { SettingsComponent } from './settings/settings.component';
+import { MasonryModule } from 'angular2-masonry';
+import { MdCardModule } from '@angular2-material/card';
 const routes:Routes = [
   {
     path: '',
@@ -58,6 +60,8 @@ const routes:Routes = [
     FormsModule,
     HttpModule,
     FlashMessagesModule,
+    MasonryModule,
+     MdCardModule,
     RouterModule.forRoot(routes)
   ],
   providers: [PinsService,Globals],

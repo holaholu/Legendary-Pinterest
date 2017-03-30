@@ -1,3 +1,35 @@
-<p>
-  pinboard works!
-</p>
+
+<div *ngIf=addbutton id=addbut>
+  <button class="btn btn-sm btn-info" (click)=showform()>Add Pin</button>
+</div>
+
+<div *ngIf=addform    id=inputform  >   
+
+<form #userForm="ngForm" (ngSubmit)="onsubmit()" class="col-xl-6" novalidate >
+
+
+     <div class="form-group" >
+<label for="">Title </label>
+<input #reftitle="ngModel" class="form-control" type="text" name=title [(ngModel)]=title   required>
+     
+</div>
+       
+<div class="form-group" >
+<label for="">URL Link</label>
+<input  #refurl="ngModel" class="form-control" type="text" name=url [(ngModel)]=url required>
+      
+     </div>
+   <button  [disabled]="!userForm.form.valid" type=submit class="btn btn-success btn-lg col-xs-4">Add Pin</button>
+     </form>
+</div>
+
+<hr>
+ <masonry [options]="options" [useImagesLoaded]="true">
+  <md-card masonry-brick *ngFor="let img of imagelist">
+    <img  src="{{img.url}}" style="width:100%;">
+   <p >{{img.title}}</p>
+  
+  </md-card>
+</masonry>
+
+

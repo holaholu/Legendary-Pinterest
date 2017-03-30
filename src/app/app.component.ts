@@ -31,7 +31,7 @@ getStore(){
 constructor(private pinsService: PinsService,private globals: Globals,private router: Router) { }
 
   ngOnInit() {
-        this.globals.loggedin=true;
+        this.globals.loggedin=false;
          this.pinsService.getUser()
        .subscribe(res => {
       this.globals.name = res, posterror => this.errorMsg=posterror ;});
