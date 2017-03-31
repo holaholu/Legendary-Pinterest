@@ -20,11 +20,7 @@ imagelist;errorMsg;
        .subscribe(res => {
       this.imagelist = res, posterror => this.errorMsg=posterror ;});
 
- setTimeout( ()=>{
-if (this.globals.loggedin==true) {}else {
-   this.router.navigate(['/login']);
-}
-  }, 1000);
+ 
 
   }
 
