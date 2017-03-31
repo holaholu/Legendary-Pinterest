@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PinsService } from '../pins.service';
 import {Router} from '@angular/router';
 import { Globals } from '../globals';
-import { FlashMessagesService } from 'angular2-flash-messages';
+//import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-settings',
@@ -11,7 +11,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class SettingsComponent implements OnInit {
 myPassword1="";myPassword2="";errorMsg="";city;state;
-constructor(private _flashMessagesService: FlashMessagesService,private pinsService: PinsService,private router: Router,private globals: Globals) { }
+constructor(private pinsService: PinsService,private router: Router,private globals: Globals) { }
 
 onsubmit(){ 
 
@@ -27,8 +27,8 @@ setTimeout(()=> {
 
   if(this.globals.name.length < 1){
     this.router.navigate(['/settings']);
-    this._flashMessagesService.grayOut(true);
-    this._flashMessagesService.show("Your password change not accepted", { timeout: 2500,cssClass: 'alert-danger' });
+    //this._flashMessagesService.grayOut(true);
+    //this._flashMessagesService.show("Your password change not accepted", { timeout: 2500,cssClass: 'alert-danger' });
   } else {
      this.router.navigate(['']);
      this.globals.loggedin=true;
@@ -36,8 +36,8 @@ setTimeout(()=> {
   
 }, 1000);
 }else {
- this._flashMessagesService.grayOut(true);
-    this._flashMessagesService.show("Your password entries are not equal", { timeout: 2500,cssClass: 'alert-danger' });
+// this._flashMessagesService.grayOut(true);
+  //  this._flashMessagesService.show("Your password entries are not equal", { timeout: 2500,cssClass: 'alert-danger' });
 
 
 }

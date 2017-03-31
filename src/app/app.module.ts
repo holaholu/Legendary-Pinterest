@@ -9,7 +9,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import {Routes,RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { FlashMessagesModule } from 'angular2-flash-messages';
+//import { FlashMessagesModule } from 'angular2-flash-messages';
 import { PinboardComponent } from './pinboard/pinboard.component';
 import { RecentpinsComponent } from './recentpins/recentpins.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -59,7 +59,7 @@ const routes:Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    FlashMessagesModule,
+    //FlashMessagesModule,
     MasonryModule,
      MdCardModule,
     RouterModule.forRoot(routes)
