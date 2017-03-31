@@ -225,13 +225,12 @@ app.get("/getimage",function(req,res){
            res.send(err.message);
          
       }else {
-        //Sort by most recent
          img.sort(function(a,b){
           return new Date(b.date) - new Date(a.date);
           }); 
       
             res.send(img);
-             
+           
     
       }
   });
